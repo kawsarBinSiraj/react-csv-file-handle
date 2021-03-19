@@ -7,17 +7,17 @@ export const Result = () => {
 
     // get formData form the store
     const formData = useSelector(state => state.stepFormData);
+    const data = Object.values(formData);
     const [csvData, setCsvData] = useState([
         ["Project Name", "Project Description", "Client", "Contractor", "Max_X", "Max_Y", "Max_Z", "Min_X", "Min_Y", "Min_Z"],
     ]);
 
     useEffect(() => {
-        let data = Object.values(formData);
         setCsvData([
             ...csvData,
             data
         ]);
-    } , []);
+    }, []);
 
 
     return (

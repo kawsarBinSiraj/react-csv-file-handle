@@ -8,18 +8,18 @@ import { toast } from 'react-toastify';
 const checkFileExtension = require('check-file-extension');
 const { Step } = Steps;
 
+const steps = [
+    {
+        title: 'First Step',
+        content: 'First-content',
+    },
+    {
+        title: 'Final Step',
+        content: 'Second-content',
+    },
+];
 
 const StepForm = () => {
-    const [steps, setSteps] = useState([
-        {
-            title: 'First Step',
-            content: 'First-content',
-        },
-        {
-            title: 'Final Step',
-            content: 'Second-content',
-        },
-    ]);
     const [current, setCurrent] = useState(0);
     const [projectName, setProjectName] = useState('');
     const [projectDesc, setProjectDesc] = useState('');
@@ -58,15 +58,14 @@ const StepForm = () => {
     };
 
     const calculateMaxMin = (data) => {
-        let expectedDataFormate = false
-        data.every((every) => {
+        let isDataFormateOk = data.every((every) => {
             const dataFormate = ["KP", "X", "Y", "Z"];
             const uplaodedDataFormate = Object.keys(every)
             const equals = (dataFormate, uplaodedDataFormate) => JSON.stringify(dataFormate) === JSON.stringify(uplaodedDataFormate);
-            equals(dataFormate, uplaodedDataFormate) ? expectedDataFormate = true : expectedDataFormate = false;
+            return equals(dataFormate, uplaodedDataFormate)
         });
 
-        if (expectedDataFormate === false) {
+        if (isDataFormateOk) {
             return toast.warning("Please input the expected data formate with consists of multiple values of KP, X, Y, Z Or input manually", { position: toast.POSITION.BOTTOM_RIGHT });
         } else {
             // value separate 
