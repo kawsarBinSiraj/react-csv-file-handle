@@ -129,7 +129,7 @@ const StepForm = () => {
             setMinX(MIN_X);
             setMinY(MIN_Y);
             setMinZ(MIN_Z);
-            toast.success("Oh Yea! automatically loaded data in the bellow input filed", { position: toast.POSITION.BOTTOM_RIGHT });
+            toast.success("Oh Yea! automatically loaded data in the below input filed", { position: toast.POSITION.BOTTOM_RIGHT });
         }
     };
 
