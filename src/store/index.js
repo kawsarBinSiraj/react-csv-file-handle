@@ -2,9 +2,7 @@
 import { createStore } from 'redux';
 
 const initialState = {
-    stepFormData: {
-        kawsar: 'kawsar'
-    }
+    stepFormData: {}
 }
 
 function reducer(state = initialState, action) {

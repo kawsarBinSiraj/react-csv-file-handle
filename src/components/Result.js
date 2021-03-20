@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { CSVLink } from "react-csv";
+import { PDFDownloadLink } from '@react-pdf/renderer'
+import PdfDocument from "./PdfDocument";
 
 export const Result = () => {
 
@@ -13,11 +15,10 @@ export const Result = () => {
     ]);
 
     useEffect(() => {
-        setCsvData([
-            ...csvData,
-            data
-        ]);
-    }, []);
+        if (!data) {
+            setCsvData([...csvData, data]);
+        }
+    }, [csvData, data]);
 
 
     return (
@@ -26,7 +27,10 @@ export const Result = () => {
                 <div className="row">
                     <div className="col-12">
                         <h3 className="fs-3 mb-5">Prototype table for the ABC company.</h3>
-                        <CSVLink className="btn btn-primary" data={csvData} filename={"prototype.csv"}>Download as CSV</CSVLink>
+                        <CSVLink className="btn btn-success" data={csvData} filename={"prototype.csv"}>Download as CSV</CSVLink>
+                        <PDFDownloadLink className="btn btn-danger ml-3" document={<PdfDocument data={formData} />} fileName="prototype.pdf">
+                            {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download as PDF')}
+                        </PDFDownloadLink>
                         <table className="table table-sm table-borderless mt-3">
                             <thead className="border-bottom">
                                 <tr>

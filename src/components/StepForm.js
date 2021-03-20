@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Steps, Button, } from 'antd';
 import { useHistory } from "react-router-dom";
 import { useForm } from 'react-hook-form';
@@ -6,18 +6,7 @@ import CSVReader from 'react-csv-reader';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 const checkFileExtension = require('check-file-extension');
-const { Step } = Steps;
 
-const steps = [
-    {
-        title: 'First Step',
-        content: 'First-content',
-    },
-    {
-        title: 'Final Step',
-        content: 'Second-content',
-    },
-];
 
 const StepForm = () => {
     const [current, setCurrent] = useState(0);
@@ -34,6 +23,17 @@ const StepForm = () => {
     const { register, handleSubmit, errors } = useForm();
     const history = useHistory();
     const dispatch = useDispatch();
+    const { Step } = Steps;
+    const steps = [
+        {
+            title: 'First Step',
+            content: '',
+        },
+        {
+            title: 'Final Step',
+            content: '',
+        },
+    ];
 
     const onSubmit = (formData) => {
         dispatch({
@@ -58,14 +58,12 @@ const StepForm = () => {
     };
 
     const calculateMaxMin = (data) => {
-        let isDataFormateOk = data.every((every) => {
-            const dataFormate = ["KP", "X", "Y", "Z"];
-            const uplaodedDataFormate = Object.keys(every)
-            const equals = (dataFormate, uplaodedDataFormate) => JSON.stringify(dataFormate) === JSON.stringify(uplaodedDataFormate);
-            return equals(dataFormate, uplaodedDataFormate)
-        });
 
-        if (isDataFormateOk) {
+        const expectedDataFormat = ["KP", "X", "Y", "Z"];
+        const uploadedDataFormat = Object.keys(data[0]);
+        const equals = (expectedDataFormat, uploadedDataFormat) => JSON.stringify(expectedDataFormat) === JSON.stringify(uploadedDataFormat);
+
+        if (equals(expectedDataFormat, uploadedDataFormat) === false) {
             return toast.warning("Please input the expected data formate with consists of multiple values of KP, X, Y, Z Or input manually", { position: toast.POSITION.BOTTOM_RIGHT });
         } else {
             // value separate 
@@ -131,6 +129,11 @@ const StepForm = () => {
             toast.success("Oh Yea! automatically loaded data in the below input filed", { position: toast.POSITION.BOTTOM_RIGHT });
         }
     };
+
+    // component will unmount
+    useEffect(() => {
+        return () => toast.dismiss();
+    }, [])
 
     return (
         <>
@@ -202,7 +205,7 @@ const StepForm = () => {
                                 <div className="mb-3">
                                     <label htmlFor="min_Z" className="form-label">Min_Z *</label>
                                     <input type="number" className="form-control" id="min_Z" name="min_Z" value={minZ} onChange={(e) => { setMinZ(e.target.value) }} ref={register({ required: true })} />
-                                    <p className="text-danger mb-0">{ (errors.min_Z && minZ.toString().length < 1) && 'Min_Z is required.'}</p>
+                                    <p className="text-danger mb-0">{(errors.min_Z && minZ.toString().length < 1) && 'Min_Z is required.'}</p>
                                 </div>
                             </div>
                             : null
